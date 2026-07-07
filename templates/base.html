@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssetHub - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <navbar>
+        <a href="{{ url_for('pages.home') }}">Home</a>        
+        <a href="{{ url_for('pages.about') }}">About</a>
+        <a href="{{ url_for('pages.contact') }}">Contact</a>
+        <a href="{{ url_for('pages.login') }}" style="margin-left: auto;">Login</a>
+    </navbar>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
