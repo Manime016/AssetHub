@@ -5,8 +5,8 @@
 {% block content %}
 <div class="container">
     <h2>Contact AssetHub Support</h2>
-    <form action="#" method="POST">
-        <div class="form-group">
+        <form action="{{ url_for('contact.contact_submit') }}" method="POST">  
+            <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
         </div>
@@ -19,6 +19,15 @@
             <textarea id="message" name="message" rows="5" required></textarea>
         </div>
         <button type="submit">Send Message</button>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="form-group" style="margin-top: 1rem;">
+                    {% for message in messages %}
+                        <p class="flash-message">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
     </form>
 </div>
 {% endblock %}

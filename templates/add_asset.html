@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="asset-container">
+
+    <div class="asset-card">
+
+        <h2>Add New Asset</h2>
+        <p>Enter the asset details below.</p>
+
+        <form method="POST" action="{{ url_for('asset.add_asset') }}">
+
+            <div class="form-group">
+                <label>Asset ID</label>
+                <input type="text" name="asset_id" required>
+            </div>
+
+            <div class="form-group">
+                <label>Asset Name</label>
+                <input type="text" name="asset_name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" name="category" required>
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label>Purchase Date</label>
+                    <input type="date" name="purchase_date">
+                </div>
+
+                <div class="form-group">
+                    <label>Purchase Price</label>
+                    <input type="number" step="0.01" name="purchase_price">
+                </div>
+
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" type="submit">
+                    Add Asset
+                </button>
+
+                <button class="btn btn-secondary" type="reset">
+                    Clear
+                </button>
+            </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="form-group" style="margin-top: 1rem;">
+                    {% for message in messages %}
+                        <p class="flash-message">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}

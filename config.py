@@ -6,3 +6,4 @@ class Config:
     MYSQL_PASSWORD = "Mani@123"
     MYSQL_DB = "AssetHub"
     DEBUG = True
+    

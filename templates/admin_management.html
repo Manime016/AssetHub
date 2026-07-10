@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Management{% endblock %}
+
+{% block content %}
+
+<div class="employee-container">
+
+    <div class="container">
+        <h1>Admin Management</h1>
+        <p>Promote employees to administrators or revoke administrator access.</p>
+    </div>
+
+    <div class="table-responsive">
+
+        <table class="employee-table">
+
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Employee Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Current Role</th>
+                    <th>Admin Password</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for employee in employees %}
+
+                <tr>
+
+                    <td>{{ employee.employee_id }}</td>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.department }}</td>
+
+                    <td>
+                        {% if employee.is_admin %}
+                            <span style="color:#28a745;font-weight:bold;">
+                                Administrator
+                            </span>
+                        {% else %}
+                            <span style="color:#6c757d;">
+                                Employee
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    {% if employee.is_admin %}
+
+                        <td style="text-align:center;">
+                            <span style="color:#28a745;font-weight:bold;">
+                                Already Assigned
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <form action="{{ url_for('admin.remove_admin') }}" method="POST">
+
+                                <input
+                                    type="hidden"
+                                    name="employee_id"
+                                    value="{{ employee.employee_id }}"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="search-btn"
+                                    style="background:#dc3545;">
+
+                                    Remove Admin
+
+                                </button>
+                                
+
+                            </form>
+
+                        </td>
+
+                    {% else %}
+
+                        <td>
+
+                            <form action="{{ url_for('admin.promote_admin') }}" method="POST">
+
+                                <input
+                                    type="hidden"
+                                    name="employee_id"
+                                    value="{{ employee.employee_id }}"
+                                >
+
+                                <input
+                                    type="password"
+                                    name="password"
+                                    class="search-input"
+                                    placeholder="Set Admin Password"
+                                    minlength="6"
+                                    required>
+
+                        </td>
+
+                        <td>
+
+                                <button
+                                    type="submit"
+                                    class="search-btn">
+
+                                    Promote
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    {% endif %}
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+
+                    <td colspan="7" class="no-data">
+                        No Employees Found.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

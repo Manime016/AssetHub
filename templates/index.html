@@ -3,8 +3,235 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Welcome to AssetHub</h1>
-    <p>Your centralized asset management ecosystem. Track, manage, and optimize your assets seamlessly.</p>
+<div class="employee-container">
+
+    <!-- Hero Section -->
+    <div class="container">
+        <h1>Welcome to AssetHub</h1>
+        <p>Your centralized asset management ecosystem. Track, manage, and optimize your assets seamlessly.</p>
+    </div>
+
+    <!-- Assigned Assets Search -->
+    <div class="search-section">
+        <h2>Asset Distribution Details</h2>
+        <p>Filter assigned assets by Employee ID or Asset ID, and process returns.</p>
+
+        <form action="{{ url_for('asset.filter_info') }}" method="get" class="search-form">
+            <label for="search_type">Filter By:</label>
+
+            <select id="search_type" name="search_type" class="search-select">
+                <option value="emp"
+                    {% if request.args.get('search_type') == 'emp' %}selected{% endif %}>
+                    Employee ID
+                </option>
+
+                <option value="asset"
+                    {% if request.args.get('search_type') == 'asset' %}selected{% endif %}>
+                    Asset ID
+                </option>
+            </select>
+
+            <label for="search_value">Search Value:</label>
+
+            <input
+                type="text"
+                id="search_value"
+                name="search_value"
+                class="search-input"
+                placeholder="Enter ID..."
+                value="{{ request.args.get('search_value', '') }}"
+                required
+            >
+
+            <button type="submit" class="search-btn">
+                Filter Distributed
+            </button>
+
+            <a href="{{ url_for('asset.asset_info') }}"
+               class="search-btn"
+               style="background:#6c757d;text-decoration:none;text-align:center;">
+                Clear
+            </a>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="form-group" style="margin-top: 1rem;">
+                    {% for message in messages %}
+                        <p class="flash-message">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        </form>
+    </div>
+
+    <!-- Assigned Assets Table -->
+    <div class="table-responsive">
+        <table class="employee-table">
+            <thead>
+                <tr>
+                    <th>Asset ID</th>
+                    <th>Asset Name</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Employee ID</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for asset in assigned_assets %}
+
+                <tr>
+                    <td>{{ asset.asset_id }}</td>
+                    <td>{{ asset.asset_name }}</td>
+                    <td>{{ asset.category }}</td>
+                    <td>{{ asset.status }}</td>
+                    <td>{{ asset.employee_id }}</td>
+
+                    <td class="text-center">
+                        <form action="{{ url_for('asset.return_asset', asset_id=asset.asset_id) }}"
+                              method="post"
+                              style="display:inline;">
+
+                            <button
+                                type="submit"
+                                class="edit-btn"
+                                style="background:#e04444;padding:0.4rem 0.8rem;">
+                                Return Item
+                            </button>
+
+                        </form>
+                    </td>
+                </tr>
+
+            {% else %}
+
+                <tr>
+                    <td colspan="6" class="no-data">
+                        No assigned assets found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inventory Search -->
+    <div class="search-section">
+        <h2>All Assets Inventory</h2>
+        <p>Browse the complete inventory and assign available assets to employees.</p>
+
+        <form action="{{ url_for('asset.all_assets') }}"
+              method="get"
+              class="search-form">
+
+            <label for="search_category">
+                Search by Category:
+            </label>
+
+            <input
+                type="text"
+                id="search_category"
+                name="search_category"
+                class="search-input"
+                placeholder="Laptop, Monitor..."
+                value="{{ request.args.get('search_category', '') }}"
+            >
+
+            <button type="submit" class="search-btn">
+                Filter Inventory
+            </button>
+        </form>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="table-responsive">
+        <table class="employee-table">
+            <thead>
+                <tr>
+                    <th>Asset ID</th>
+                    <th>Asset Name</th>
+                    <th>Category</th>
+                    <th>Purchase Price</th>
+                    <th>Status</th>
+                    <th class="text-center">Assign Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for asset in all_assets %}
+
+                <tr>
+                    <td>{{ asset.asset_id }}</td>
+                    <td>{{ asset.asset_name }}</td>
+                    <td>{{ asset.category }}</td>
+                    <td>₹{{ asset.purchase_price }}</td>
+                    <td>{{ asset.status }}</td>
+
+                    <td class="text-center">
+
+                        {% if asset.status == "Available" %}
+
+                        <form action="{{ url_for('asset.assign_asset', asset_id=asset.asset_id) }}"
+                              method="post"
+                              class="search-form"
+                              style="margin:0;gap:0.5rem;justify-content:center;">
+
+                            <input
+                                type="text"
+                                name="employee_id"
+                                class="search-input"
+                                placeholder="Employee ID"
+                                required
+                                style="width:120px;padding:0.4rem;"
+                            >
+
+                            <button
+                                type="submit"
+                                class="search-btn"
+                                style="background:#2ecc71;padding:0.4rem 0.8rem;">
+                                Assign
+                            </button>
+                            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="form-group" style="margin-top: 1rem;">
+                    {% for message in messages %}
+                        <p class="flash-message">{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+                        </form>
+
+                        {% else %}
+
+                        <span style="color:#777;font-style:italic;">
+                            Already Assigned
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+                </tr>
+
+            {% else %}
+
+                <tr>
+                    <td colspan="6" class="no-data">
+                        No assets found.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
 </div>
 {% endblock %}
