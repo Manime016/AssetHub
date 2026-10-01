@@ -1,19 +1,20 @@
-# AssetHub — Asset Management Backend
+# AssetHub
 
-AssetHub is a Flask and MySQL application for managing employees, company assets and asset assignments.
+A Flask + MySQL asset management application for tracking employees, company assets and asset assignments.
 
-The project is intentionally backend-focused and demonstrates REST-style application workflows, relational database integration, authentication and modular Flask architecture.
+AssetHub is intentionally backend-oriented. It demonstrates relational data modeling, authentication, role-based administration, CRUD workflows, search/filtering and modular Flask application structure.
 
-## Tech Stack
+## Stack
 
 - Python
 - Flask
 - MySQL
+- mysql-connector-python
 - Jinja2
-- SQL
 - Flask Blueprints
+- python-dotenv
 
-## Core Features
+## Features
 
 - Employee management
 - Asset management
@@ -21,26 +22,40 @@ The project is intentionally backend-focused and demonstrates REST-style applica
 - Authentication
 - Admin management
 - Search and filtering
-- Dashboard data
+- Dashboard views
 - MySQL persistence
-- Modular route organization with Flask Blueprints
+- Modular blueprint-based routing
 
-## Project Structure
+## Structure
 
 ```text
 AssetHub/
-├── database/       # Database connection and query/data-access code
-├── routes/         # Flask route blueprints
+├── database/       # MySQL connection and data-access code
+├── routes/         # Flask blueprints
 ├── templates/      # Server-rendered views
-├── static/         # Frontend assets used to interact with the backend
-├── config.py       # Application configuration
-├── app.py          # Flask application entry point
+├── static/         # Browser assets
+├── config.py       # Environment-backed configuration
+├── app.py          # Application entrypoint
+├── .env.example
 └── requirements.txt
 ```
 
-## Running Locally
+## Configuration
 
-Create and activate a virtual environment:
+Create a local environment file from `.env.example`:
+
+```text
+SECRET_KEY=your_secret
+FLASK_DEBUG=false
+MYSQL_HOST=localhost
+MYSQL_USER=your_user
+MYSQL_PASSWORD=your_password
+MYSQL_DB=AssetHub
+```
+
+`.env` is ignored by Git. Never commit database passwords or production secrets.
+
+## Run Locally
 
 ```bash
 python -m venv .venv
@@ -52,13 +67,19 @@ Windows:
 .venv\Scripts\activate
 ```
 
+macOS/Linux:
+
+```bash
+source .venv/bin/activate
+```
+
 Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Configure the MySQL connection using the project's configuration/environment settings, create the required database and tables, then start the application:
+Create the required MySQL database/tables, configure `.env`, then start the application:
 
 ```bash
 python app.py
@@ -66,8 +87,8 @@ python app.py
 
 ## Engineering Focus
 
-The project demonstrates how a Flask application can separate route handling, database access and application configuration while using MySQL for persistent relational data.
+The project separates Flask route handling, database access and configuration instead of putting database operations directly into templates or the application entrypoint. This makes the codebase easier to reason about and extend.
 
 ## Project Status
 
-Portfolio project. The primary goal is demonstrating practical Python backend development with Flask and MySQL.
+Portfolio project demonstrating practical Python backend development with Flask and MySQL.
